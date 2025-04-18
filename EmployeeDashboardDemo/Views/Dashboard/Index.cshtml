@@ -1,0 +1,104 @@
+﻿@model EmployeeDashboardDemo.Models.DashboardViewModel
+
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="dashboard">
+    <section id="overview">
+        <h2>Overview</h2>
+
+        <div class="button-container">
+            <a href="@Url.Action("Create", "Division")" class="btn">Add Division</a>
+            <a href="@Url.Action("Create", "Department")" class="btn">Add Department</a>
+            <a href="@Url.Action("Create", "Position")" class="btn">Add Position</a>
+        </div>
+
+        <h3>Last five (5) Divisions <a href="@Url.Action("Index", "Division")">See All</a></h3>
+        <table>
+            <thead><tr><th>ID</th><th>Name</th></tr></thead>
+            <tbody>
+                @if (Model.Divisions.Any())
+                {
+                    foreach (var d in Model.Divisions)
+                    {
+                        <tr><td>@d.Id</td><td>@d.Name</td></tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="2">No records found</td></tr>
+                }
+            </tbody>
+        </table>
+
+        <h3>Last five (5) Departments <a href="@Url.Action("Index", "Department")">See All</a></h3>
+        <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Division</th></tr></thead>
+            <tbody>
+                @if (Model.Departments.Any())
+                {
+                    foreach (var dep in Model.Departments)
+                    {
+                        <tr><td>@dep.Id</td><td>@dep.Name</td><td>@dep.Division.Name</td></tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="3">No records found</td></tr>
+                }
+            </tbody>
+        </table>
+
+        <h3>Last five (5) Positions <a href="@Url.Action("Index", "Position")">See All</a></h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Division</th>
+                    <th>Department</th>
+                    <th>Description</th>
+                    <th>Parking Stall</th>
+                    <th>Desk Phone</th>
+                    <th>Cell Phone</th>
+                    <th>Related Document</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Positions.Any())
+                {
+                    foreach (var pos in Model.Positions)
+                    {
+                        <tr>
+                            <td>@pos.Id</td>
+                            <td>@pos.Name</td>
+                            <td>@pos.Division.Name</td>
+                            <td>@pos.Department.Name</td>
+                            <td>@pos.Description</td>
+                            <td>@(pos.CheckboxParkingStall ? "Yes" : "No")</td>
+                            <td>@(pos.RadioDeskPhone ? "Yes" : "No")</td>
+                            <td>@(pos.RadioCellPhone ? "Yes" : "No")</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(pos.RelatedDocument))
+                                {
+                                    <a href="@Url.Content("~/uploads/" + pos.RelatedDocument)">View</a>
+                                }
+                                else
+                                {
+                                    @:No Document
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="9">No records found</td></tr>
+                }
+            </tbody>
+        </table>
+
+    </section>
+</div>

@@ -1,0 +1,327 @@
+﻿/* Dashboard Layout */
+.dashboard {
+    display: flex;
+}
+
+.sidebar {
+    width: 180px;
+    background: #f9f9f9;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .sidebar ul li {
+            margin-bottom: 20px;
+        }
+
+            .sidebar ul li a {
+                text-decoration: none;
+                color: #333;
+                font-weight: 600;
+                display: block;
+                width: 100%;
+                margin: -20px;
+                padding: 10px 20px;
+                transition: background 0.3s;
+            }
+
+                .sidebar ul li a:hover {
+                    background: #e63946;
+                    color: #fff;
+                }
+
+                .sidebar ul li a i {
+                    margin-right: 10px;
+                }
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+}
+
+    .main-content section {
+        margin-bottom: 40px;
+    }
+
+    .main-content h2 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 34px;
+        margin-bottom: 20px;
+        text-align: left;
+        color: #e63946;
+    }
+
+    .main-content h3 {
+        font-family: 'Montserrat', sans-serif;
+        text-align: left;
+    }
+
+    .main-content p {
+        text-align: left;
+    }
+
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table,
+th,
+td {
+    border: 1px solid #ddd;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+
+/* Button Styles */
+.button-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.btn {
+    background-color: #e63946;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+    .btn:hover {
+        background-color: #fff;
+        color: #e63946;
+        border: 2px solid #e63946;
+    }
+
+.btn-secondary {
+    background-color: #6c757d !important;
+    color: #fff;
+    border: none;
+}
+
+    .btn-secondary:hover {
+        background-color: #fff !important;
+        color: #5a6268 !important;
+        border: 2px solid #5a6268 !important;
+    }
+
+
+/* Active Link Styles */
+.sidebar ul li a.active {
+    background-color: #e63946;
+    color: #fff;
+}
+
+/* Form Styles */
+.form-control {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+.form-group {
+    display: block;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 2px;
+        text-align: left;
+    }
+
+    .form-group input[type="text"],
+    .form-group select,
+    .form-group textarea,
+    .form-group input[type="file"] {
+        width: 100%;
+        padding: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .form-group input[type="checkbox"],
+    .form-group input[type="radio"] {
+        margin-top: 5px;
+        margin-right: 5px;
+    }
+
+    .form-group.buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+        .form-group.buttons button,
+        .form-group.buttons .btn-secondary {
+            width: auto;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 0;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .form-group.buttons button {
+            background-color: #e63946;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+            .form-group.buttons button:hover {
+                background-color: #fff;
+                color: #e63946;
+                border: 2px solid #e63946;
+            }
+
+        .form-group.buttons .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+            .form-group.buttons .btn-secondary:hover {
+                background-color: #5a6268;
+            }
+
+.alert {
+    padding: 10px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+    .alert.alert-danger {
+        background-color: #f44336;
+        border-radius: 8px;
+    }
+
+    .alert.alert-success {
+        background-color: #4CAF50;
+        border-radius: 8px;
+    }
+
+
+/* Pagination */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+    .pagination .btn {
+        margin: 0 5px;
+    }
+
+        .pagination .btn.active {
+            font-weight: bold;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+        }
+
+
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+
+        .main-content h2 {
+            font-size: 20px;
+        }
+
+    .responsive-table {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+        thead tr {
+            display: none;
+        }
+
+    tr {
+        margin-bottom: 10px;
+    }
+
+    td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+
+        td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 0;
+            width: 50%;
+            padding-left: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+    .form-group input[type="text"] {
+        padding: 10px;
+    }
+}

@@ -1,0 +1,66 @@
+﻿@model PagedList.IPagedList<EmployeeDashboardDemo.Models.Division>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Divisions";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="dashboard">
+    <section id="divisions">
+        <h2>Divisions</h2>
+
+        <div class="button-container">
+            <a href="@Url.Action("Create", "Divisions")" class="btn">Add Division</a>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
+        <h3>All Divisions</h3>
+        <div class="responsive-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        foreach (var division in Model)
+                        {
+                            <tr>
+                                <td data-label="ID">@division.Id</td>
+                                <td data-label="Name">@division.Name</td>
+                                <td data-label="Action">
+                                    <a href="@Url.Action("Edit", "Divisions", new { id = division.Id })" class="btn btn-secondary">Edit</a>
+                                    <a href="@Url.Action("Delete", "Divisions", new { id = division.Id })" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this division?');">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="3">No records found</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions()
+            {
+                DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                DisplayLinkToIndividualPages = true,
+                ClassToApplyToFirstListItemInPager = "btn btn-secondary",
+                ClassToApplyToLastListItemInPager = "btn btn-secondary"
+            })
+        </div>
+    </section>
+</div>
