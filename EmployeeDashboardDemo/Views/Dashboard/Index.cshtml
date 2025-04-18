@@ -10,12 +10,12 @@
         <h2>Overview</h2>
 
         <div class="button-container">
-            <a href="@Url.Action("Create", "Division")" class="btn">Add Division</a>
-            <a href="@Url.Action("Create", "Department")" class="btn">Add Department</a>
-            <a href="@Url.Action("Create", "Position")" class="btn">Add Position</a>
+            <a href="@Url.Action("Add", "Divisions")" class="btn">Add Division</a>
+            <a href="@Url.Action("Create", "Departments")" class="btn">Add Department</a>
+            <a href="@Url.Action("Create", "Positions")" class="btn">Add Position</a>
         </div>
 
-        <h3>Last five (5) Divisions <a href="@Url.Action("Index", "Division")">See All</a></h3>
+        <h3>Last five (5) Divisions <a href="@Url.Action("Index", "Divisions")">See All</a></h3>
         <table>
             <thead><tr><th>ID</th><th>Name</th></tr></thead>
             <tbody>
@@ -33,7 +33,7 @@
             </tbody>
         </table>
 
-        <h3>Last five (5) Departments <a href="@Url.Action("Index", "Department")">See All</a></h3>
+        <h3>Last five (5) Departments <a href="@Url.Action("Index", "Departments")">See All</a></h3>
         <table>
             <thead><tr><th>ID</th><th>Name</th><th>Division</th></tr></thead>
             <tbody>
@@ -51,7 +51,7 @@
             </tbody>
         </table>
 
-        <h3>Last five (5) Positions <a href="@Url.Action("Index", "Position")">See All</a></h3>
+        <h3>Last five (5) Positions <a href="@Url.Action("Index", "Positions")">See All</a></h3>
         <table>
             <thead>
                 <tr>

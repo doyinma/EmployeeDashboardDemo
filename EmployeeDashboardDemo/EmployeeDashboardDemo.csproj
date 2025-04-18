@@ -145,6 +145,10 @@
     <Compile Include="Migrations\202504170142370_InitialCreate.Designer.cs">
       <DependentUpon>202504170142370_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202504181923449_UpdatedModel.cs" />
+    <Compile Include="Migrations\202504181923449_UpdatedModel.Designer.cs">
+      <DependentUpon>202504181923449_UpdatedModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="Models\DashboardViewModel.cs" />
@@ -206,9 +210,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Divisions\Create.cshtml" />
     <Content Include="Views\Divisions\Delete.cshtml" />
-    <Content Include="Views\Divisions\Details.cshtml" />
     <Content Include="Views\Divisions\Edit.cshtml" />
     <Content Include="Views\Divisions\Index.cshtml" />
     <Content Include="Views\Departments\Create.cshtml" />
@@ -224,6 +226,7 @@
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Shared\_Sidebar.cshtml" />
     <Content Include="Views\Shared\_DashboardLayout.cshtml" />
+    <Content Include="Views\Divisions\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -259,6 +262,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202504170142370_InitialCreate.resx">
       <DependentUpon>202504170142370_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202504181923449_UpdatedModel.resx">
+      <DependentUpon>202504181923449_UpdatedModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

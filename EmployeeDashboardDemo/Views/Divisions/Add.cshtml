@@ -1,15 +1,15 @@
-﻿@model EmployeeDashboardDemo.Models.Division
+﻿@model EmployeeDashboardDemo.Models.Division 
 
 @{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
-    ViewBag.Title = "Edit Division";
+    ViewBag.Title = "Add Division";
 }
 
 <div class="dashboard">
     <main class="main-content">
-        <section id="edit-division">
-            <h2>Edit Division</h2>
-            <p>Please update the form below to edit the division.</p>
+        <section id="add-division">
+            <h2>Add Division</h2>
+            <p>Please fill the form below to add a new division.</p>
 
             @if (TempData["Success"] != null)
             {
@@ -21,10 +21,9 @@
                 @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
             }
 
-            @using (Html.BeginForm("Edit", "Divisions", FormMethod.Post))
+            @using (Html.BeginForm("Add", "Divisions", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
-                @Html.HiddenFor(model => model.Id)
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Name)
@@ -40,3 +39,4 @@
         </section>
     </main>
 </div>
+
