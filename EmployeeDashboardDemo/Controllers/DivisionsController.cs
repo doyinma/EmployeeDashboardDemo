@@ -25,21 +25,6 @@ namespace EmployeeDashboardDemo.Controllers
             return View(divisions);
         }
 
-        // GET: Divisions/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Division division = db.Divisions.Find(id);
-            if (division == null)
-            {
-                return HttpNotFound();
-            }
-            return View(division);
-        }
-
         // GET: Divisions/Add
         public ActionResult Add()
         {
@@ -101,7 +86,7 @@ namespace EmployeeDashboardDemo.Controllers
             if (division == null)
                 return HttpNotFound();
 
-            return View(division); // confirmation page
+            return View(division);
         }
 
         // POST: Divisions/Delete/5

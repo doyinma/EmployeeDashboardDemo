@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using EmployeeDashboardDemo.Models;
+using PagedList;
 
 namespace EmployeeDashboardDemo.Controllers
 {
@@ -15,109 +16,109 @@ namespace EmployeeDashboardDemo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Departments
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            var departments = db.Departments.Include(d => d.Division);
-            return View(departments.ToList());
+            int pageSize = 10;
+            var departments = db.Departments
+                                .Include(d => d.Division)
+                                .OrderBy(d => d.Id);
+
+            return View(departments.ToPagedList(page, pageSize));
         }
 
-        // GET: Departments/Details/5
-        public ActionResult Details(int? id)
+        // GET: Departments/Add
+        public ActionResult Add()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Department department = db.Departments.Find(id);
-            if (department == null)
-            {
-                return HttpNotFound();
-            }
-            return View(department);
-        }
-
-        // GET: Departments/Create
-        public ActionResult Create()
-        {
-            ViewBag.DivisionId = new SelectList(db.Divisions, "Id", "Name");
+            ViewBag.DivisionId = new SelectList(db.Divisions.ToList(), "Id", "Name");
             return View();
         }
 
-        // POST: Departments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Departments/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,DateCreated,DivisionId")] Department department)
+        public ActionResult Add(Department department)
         {
+            if (string.IsNullOrWhiteSpace(department.Name))
+            {
+                ModelState.AddModelError("Name", "Please enter a department name.");
+            }
+
+            if (department.DivisionId == 0)
+            {
+                ModelState.AddModelError("DivisionId", "Please select a division.");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Departments.Add(department);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                TempData["Success"] = "Department added successfully.";
+                return RedirectToAction("Add");
             }
 
-            ViewBag.DivisionId = new SelectList(db.Divisions, "Id", "Name", department.DivisionId);
+            ViewBag.DivisionId = new SelectList(db.Divisions.ToList(), "Id", "Name", department.DivisionId);
             return View(department);
         }
 
-        // GET: Departments/Edit/5
+        // GET: Department/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Department department = db.Departments.Find(id);
+
+            var department = db.Departments.Find(id);
             if (department == null)
-            {
                 return HttpNotFound();
-            }
+
             ViewBag.DivisionId = new SelectList(db.Divisions, "Id", "Name", department.DivisionId);
             return View(department);
         }
 
-        // POST: Departments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Department/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,DateCreated,DivisionId")] Department department)
+        public ActionResult Edit([Bind(Include = "Id,Name,DivisionId")] Department department)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(department).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { success = 1 });
             }
+
             ViewBag.DivisionId = new SelectList(db.Divisions, "Id", "Name", department.DivisionId);
             return View(department);
         }
 
-        // GET: Departments/Delete/5
+        // GET: Department/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Department department = db.Departments.Find(id);
+
+            // Eager-load the Division navigation property
+            var department = db.Departments
+                               .Include(d => d.Division)
+                               .FirstOrDefault(d => d.Id == id);
+
             if (department == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(department);
         }
 
-        // POST: Departments/Delete/5
+        // POST: Department/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Department department = db.Departments.Find(id);
-            db.Departments.Remove(department);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            var department = db.Departments.Find(id);
+            if (department != null)
+            {
+                db.Departments.Remove(department);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", new { success = 1 });
         }
 
         protected override void Dispose(bool disposing)

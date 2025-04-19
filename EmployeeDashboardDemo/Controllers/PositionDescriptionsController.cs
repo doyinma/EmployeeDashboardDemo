@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -13,89 +14,156 @@ namespace EmployeeDashboardDemo.Controllers
     public class PositionDescriptionsController : Controller
     {
         private AppDbContext db = new AppDbContext();
+        private const int RecordsPerPage = 10;
 
         // GET: PositionDescriptions
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            var positionDescriptions = db.PositionDescriptions.Include(p => p.Department).Include(p => p.Division);
-            return View(positionDescriptions.ToList());
+            var totalRecords = db.PositionDescriptions.Count();
+            var totalPages = (int)Math.Ceiling((double)totalRecords / RecordsPerPage);
+            var positions = db.PositionDescriptions
+                .Include(p => p.Division)
+                .Include(p => p.Department)
+                .OrderBy(p => p.Id)
+                .Skip((page - 1) * RecordsPerPage)
+                .Take(RecordsPerPage)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(positions);
         }
 
-        // GET: PositionDescriptions/Details/5
-        public ActionResult Details(int? id)
+        // GET: PositionDescriptions/Add
+        public ActionResult Add()
         {
-            if (id == null)
+            using (var context = new AppDbContext())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Divisions = context.Divisions.ToList();
+                ViewBag.Departments = context.Departments.ToList();
             }
-            PositionDescription positionDescription = db.PositionDescriptions.Find(id);
-            if (positionDescription == null)
-            {
-                return HttpNotFound();
-            }
-            return View(positionDescription);
-        }
 
-        // GET: PositionDescriptions/Create
-        public ActionResult Create()
-        {
-            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name");
-            ViewBag.DivisionId = new SelectList(db.Divisions, "Id", "Name");
             return View();
         }
 
-        // POST: PositionDescriptions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: PositionDescriptions/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,DivisionId,DepartmentId,Description,CheckboxParkingStall,RadioDeskPhone,RadioCellPhone,RelatedDocument,DateCreated")] PositionDescription positionDescription)
+        public ActionResult Add(PositionDescription model, HttpPostedFileBase relatedDocument)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                db.PositionDescriptions.Add(positionDescription);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                // Repopulate dropdowns if model is invalid
+                using (var context = new AppDbContext())
+                {
+                    ViewBag.Divisions = context.Divisions.ToList();
+                    ViewBag.Departments = context.Departments.ToList();
+                }
+
+                return View(model);
             }
 
-            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", positionDescription.DepartmentId);
-            ViewBag.DivisionId = new SelectList(db.Divisions, "Id", "Name", positionDescription.DivisionId);
-            return View(positionDescription);
+            using (var db = new AppDbContext())
+            {
+                // Validate department and division exist
+                var departmentExists = db.Departments.Any(d => d.Id == model.DepartmentId);
+                var divisionExists = db.Divisions.Any(d => d.Id == model.DivisionId);
+
+                if (!departmentExists)
+                    ModelState.AddModelError("DepartmentId", "Invalid department selected.");
+                if (!divisionExists)
+                    ModelState.AddModelError("DivisionId", "Invalid division selected.");
+
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Divisions = db.Divisions.ToList();
+                    ViewBag.Departments = db.Departments.ToList();
+                    return View(model);
+                }
+
+                // Handle file upload 
+                if (relatedDocument != null && relatedDocument.ContentLength > 0)
+                {
+                    // Generate a unique file name
+                    var fileName = Path.GetFileName(relatedDocument.FileName);
+                    var path = Path.Combine(Server.MapPath("~/Content/uploads"), fileName);
+                    // Save the file to the uploads directory inside the Content folder
+                    relatedDocument.SaveAs(path);
+
+                    // Assign the saved file name to the model's property
+                    model.RelatedDocument = fileName;
+                }
+
+                // Save the model to the database (as per your original logic)
+                db.PositionDescriptions.Add(model);
+                db.SaveChanges();
+
+                TempData["SuccessMessage"] = "Position added successfully.";
+                return RedirectToAction("Add");
+            }
         }
 
         // GET: PositionDescriptions/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            using (var db = new AppDbContext())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var position = db.PositionDescriptions.Find(id);
+
+                if (position == null)
+                {
+                    return HttpNotFound();
+                }
+
+                ViewBag.Divisions = db.Divisions.ToList();
+                ViewBag.Departments = db.Departments.ToList();
+
+                return View(position);
             }
-            PositionDescription positionDescription = db.PositionDescriptions.Find(id);
-            if (positionDescription == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", positionDescription.DepartmentId);
-            ViewBag.DivisionId = new SelectList(db.Divisions, "Id", "Name", positionDescription.DivisionId);
-            return View(positionDescription);
         }
 
-        // POST: PositionDescriptions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,DivisionId,DepartmentId,Description,CheckboxParkingStall,RadioDeskPhone,RadioCellPhone,RelatedDocument,DateCreated")] PositionDescription positionDescription)
+        public ActionResult Edit(PositionDescription model, HttpPostedFileBase relatedDocument)
         {
-            if (ModelState.IsValid)
+            using (var db = new AppDbContext())
             {
-                db.Entry(positionDescription).State = EntityState.Modified;
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Divisions = db.Divisions.ToList();
+                    ViewBag.Departments = db.Departments.ToList();
+                    return View(model);
+                }
+
+                var existing = db.PositionDescriptions.Find(model.Id);
+                if (existing == null)
+                {
+                    return HttpNotFound();
+                }
+
+                // Update fields
+                existing.Name = model.Name;
+                existing.DivisionId = model.DivisionId;
+                existing.DepartmentId = model.DepartmentId;
+                existing.Description = model.Description;
+                existing.CheckboxParkingStall = model.CheckboxParkingStall;
+                existing.RadioDeskPhone = model.RadioDeskPhone;
+                existing.RadioCellPhone = model.RadioCellPhone;
+
+                // Handle file upload
+                if (relatedDocument != null && relatedDocument.ContentLength > 0)
+                {
+                    var fileName = Path.GetFileName(relatedDocument.FileName);
+                    var path = Path.Combine(Server.MapPath("~/Content/uploads"), fileName);
+                    relatedDocument.SaveAs(path);
+                    existing.RelatedDocument = fileName;
+                }
+
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                TempData["SuccessMessage"] = "Position updated successfully.";
+                return RedirectToAction("Edit", new { id = model.Id });
             }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", positionDescription.DepartmentId);
-            ViewBag.DivisionId = new SelectList(db.Divisions, "Id", "Name", positionDescription.DivisionId);
-            return View(positionDescription);
         }
 
         // GET: PositionDescriptions/Delete/5
@@ -103,14 +171,23 @@ namespace EmployeeDashboardDemo.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
-            PositionDescription positionDescription = db.PositionDescriptions.Find(id);
-            if (positionDescription == null)
+
+            using (var db = new AppDbContext())
             {
-                return HttpNotFound();
+                var position = db.PositionDescriptions
+                                 .Include("Division") 
+                                 .Include("Department")
+                                 .FirstOrDefault(p => p.Id == id);
+
+                if (position == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(position);
             }
-            return View(positionDescription);
         }
 
         // POST: PositionDescriptions/Delete/5
@@ -118,10 +195,30 @@ namespace EmployeeDashboardDemo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            PositionDescription positionDescription = db.PositionDescriptions.Find(id);
-            db.PositionDescriptions.Remove(positionDescription);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            using (var db = new AppDbContext())
+            {
+                var position = db.PositionDescriptions.Find(id);
+                if (position == null)
+                {
+                    return HttpNotFound();
+                }
+
+                // Delete associated file if it exists
+                if (!string.IsNullOrEmpty(position.RelatedDocument))
+                {
+                    var filePath = Server.MapPath("~/Content/uploads/" + position.RelatedDocument);
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+
+                db.PositionDescriptions.Remove(position);
+                db.SaveChanges();
+
+                TempData["SuccessMessage"] = "Position deleted successfully.";
+                return RedirectToAction("Index");
+            }
         }
 
         protected override void Dispose(bool disposing)

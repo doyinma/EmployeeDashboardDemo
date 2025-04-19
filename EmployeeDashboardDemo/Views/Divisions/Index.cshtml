@@ -52,15 +52,27 @@
         </div>
 
         <!-- Pagination -->
+        @{
+            int currentPage = Model.PageNumber;
+            int totalPages = Model.PageCount;
+        }
+
         <div class="pagination">
-            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions()
+            @if (currentPage > 1)
             {
-                DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-                DisplayLinkToNextPage = PagedListDisplayMode.Always,
-                DisplayLinkToIndividualPages = true,
-                ClassToApplyToFirstListItemInPager = "btn btn-secondary",
-                ClassToApplyToLastListItemInPager = "btn btn-secondary"
-            })
+                <a href="@Url.Action("Index", new { page = currentPage - 1 })" class="btn btn-secondary">Previous</a>
+            }
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <a href="@Url.Action("Index", new { page = i })"
+                   class="btn btn-secondary @(i == currentPage ? "active" : "")">@i</a>
+            }
+
+            @if (currentPage < totalPages)
+            {
+                <a href="@Url.Action("Index", new { page = currentPage + 1 })" class="btn btn-secondary">Next</a>
+            }
         </div>
     </section>
 </div>

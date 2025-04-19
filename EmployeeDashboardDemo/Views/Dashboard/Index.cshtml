@@ -11,8 +11,8 @@
 
         <div class="button-container">
             <a href="@Url.Action("Add", "Divisions")" class="btn">Add Division</a>
-            <a href="@Url.Action("Create", "Departments")" class="btn">Add Department</a>
-            <a href="@Url.Action("Create", "Positions")" class="btn">Add Position</a>
+            <a href="@Url.Action("Add", "Departments")" class="btn">Add Department</a>
+            <a href="@Url.Action("Add", "PositionDescriptions")" class="btn">Add Position</a>
         </div>
 
         <h3>Last five (5) Divisions <a href="@Url.Action("Index", "Divisions")">See All</a></h3>
@@ -51,7 +51,7 @@
             </tbody>
         </table>
 
-        <h3>Last five (5) Positions <a href="@Url.Action("Index", "Positions")">See All</a></h3>
+        <h3>Last five (5) Positions <a href="@Url.Action("Index", "PositionDescriptions")">See All</a></h3>
         <table>
             <thead>
                 <tr>
@@ -83,7 +83,7 @@
                             <td>
                                 @if (!string.IsNullOrEmpty(pos.RelatedDocument))
                                 {
-                                    <a href="@Url.Content("~/uploads/" + pos.RelatedDocument)">View</a>
+                                    <a href="@Url.Content("~/Content/uploads/" + pos.RelatedDocument)" target="_blank">View</a>
                                 }
                                 else
                                 {

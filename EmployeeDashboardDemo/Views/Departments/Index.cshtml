@@ -1,45 +1,90 @@
-﻿@model IEnumerable<EmployeeDashboardDemo.Models.Department>
+﻿@model PagedList.IPagedList<EmployeeDashboardDemo.Models.Department>
+@using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Departments";
 }
 
-<h2>Index</h2>
+<div class="dashboard">
+    <main class="main-content">
+        <section id="departments">
+            <h2>Departments</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Division.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </th>
-        <th></th>
-    </tr>
+            <div class="button-container">
+                <a href="@Url.Action("Add", "Departments")" class="btn">Add Department</a>
+            </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Division.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateCreated)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+            <h3>All Departments</h3>
 
-</table>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">Successful</div>
+            }
+
+            <div class="responsive-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Division</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            foreach (var dept in Model)
+                            {
+                                <tr>
+                                    <td data-label="ID">@dept.Id</td>
+                                    <td data-label="Name">@dept.Name</td>
+                                    <td data-label="Division">@dept.Division.Name</td>
+                                    <td data-label="Action">
+                                        <a href="@Url.Action("Edit", "Departments", new { id = dept.Id })" class="btn btn-secondary">Edit</a>
+                                        <a href="@Url.Action("Delete", "Departments", new { id = dept.Id })" class="btn btn-danger" onclick="return confirmDelete();">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="4">No records found</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            @{
+                int currentPage = Model.PageNumber;
+                int totalPages = Model.PageCount;
+            }
+
+            <div class="pagination">
+                @if (currentPage > 1)
+                {
+                    <a href="@Url.Action("Index", new { page = currentPage - 1 })" class="btn btn-secondary">Previous</a>
+                }
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <a href="@Url.Action("Index", new { page = i })"
+                       class="btn btn-secondary @(i == currentPage ? "active" : "")">@i</a>
+                }
+
+                @if (currentPage < totalPages)
+                {
+                    <a href="@Url.Action("Index", new { page = currentPage + 1 })" class="btn btn-secondary">Next</a>
+                }
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this department?");
+    }
+</script>

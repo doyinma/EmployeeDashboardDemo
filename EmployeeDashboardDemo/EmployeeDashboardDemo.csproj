@@ -149,6 +149,14 @@
     <Compile Include="Migrations\202504181923449_UpdatedModel.Designer.cs">
       <DependentUpon>202504181923449_UpdatedModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202504190213488_UpdatedDepartmentModel.cs" />
+    <Compile Include="Migrations\202504190213488_UpdatedDepartmentModel.Designer.cs">
+      <DependentUpon>202504190213488_UpdatedDepartmentModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202504191300285_UpdatedPositionModel.cs" />
+    <Compile Include="Migrations\202504191300285_UpdatedPositionModel.Designer.cs">
+      <DependentUpon>202504191300285_UpdatedPositionModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="Models\DashboardViewModel.cs" />
@@ -213,24 +221,23 @@
     <Content Include="Views\Divisions\Delete.cshtml" />
     <Content Include="Views\Divisions\Edit.cshtml" />
     <Content Include="Views\Divisions\Index.cshtml" />
-    <Content Include="Views\Departments\Create.cshtml" />
     <Content Include="Views\Departments\Delete.cshtml" />
-    <Content Include="Views\Departments\Details.cshtml" />
     <Content Include="Views\Departments\Edit.cshtml" />
     <Content Include="Views\Departments\Index.cshtml" />
-    <Content Include="Views\PositionDescriptions\Create.cshtml" />
     <Content Include="Views\PositionDescriptions\Delete.cshtml" />
-    <Content Include="Views\PositionDescriptions\Details.cshtml" />
     <Content Include="Views\PositionDescriptions\Edit.cshtml" />
     <Content Include="Views\PositionDescriptions\Index.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Shared\_Sidebar.cshtml" />
     <Content Include="Views\Shared\_DashboardLayout.cshtml" />
     <Content Include="Views\Divisions\Add.cshtml" />
+    <Content Include="Views\Departments\Add.cshtml" />
+    <Content Include="Views\PositionDescriptions\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\images\" />
+    <Folder Include="Content\uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -265,6 +272,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202504181923449_UpdatedModel.resx">
       <DependentUpon>202504181923449_UpdatedModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202504190213488_UpdatedDepartmentModel.resx">
+      <DependentUpon>202504190213488_UpdatedDepartmentModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202504191300285_UpdatedPositionModel.resx">
+      <DependentUpon>202504191300285_UpdatedPositionModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
