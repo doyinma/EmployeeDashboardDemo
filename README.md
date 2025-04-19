@@ -4,12 +4,12 @@ This is a web-based **Employee Management System (PD-EMS)** designed to help bus
 
 ## Overview
 
-**Oladoyin Employee Management System (PD-EMS)** is designed to streamline the process of managing employee information. The system includes functionalities to manage positions, departments, and related documents. It allows administrators to add, edit, delete, and list employees and their corresponding roles and departments.
+**Oladoyin Employee Management System (PD-EMS)** is designed to streamline the process of managing employee information. The system includes functionalities to manage positions, departments, and related documents. It allows administrators to add, edit, delete, and list employees and their corresponding roles and departments. 
 
 ### Key Features:
 
 - **Employee Position Management**: Add, edit, and delete positions.
-- **Department Management**: Create, modify, and remove departments.
+- **Department Management**: Add, modify, and remove departments. 
 - **Document Management**: Attach and view related documents (e.g., contracts, agreements) for positions.
 - **Pagination**: Lists are paginated to enhance performance when dealing with large amounts of data.
 - **Responsive Design**: The application is fully responsive and works across devices (desktops, tablets, and smartphones).
@@ -19,13 +19,13 @@ This is a web-based **Employee Management System (PD-EMS)** designed to help bus
 
 - **Frontend**: 
   - HTML5
-  - CSS3 (custom styling with **Tailwind CSS** and custom `styles.css`)
+  - CSS3 (custom styling with `styles.css`)
   - JavaScript (custom scripts in `script.js` for interactive UI)
   - **Font Awesome** for icons
 - **Backend**: 
-  - **ASP.NET MVC 5** (C#)
-  - **Entity Framework 6** (for ORM and database access)
-  - **Microsoft SQL Server** (for data storage)
+  - **ASP.NET MVC 5** (C#) 
+  - **Entity Framework 6** (for ORM and database access) 
+  - **Microsoft SQL Server** (for data storage) 
 - **Other**: 
-  - **Bootstrap** (for basic grid layout and responsive design)
-  - **jQuery** (for DOM manipulation)
+  - **Bootstrap** (for basic grid layout and responsive design) 
+  - **jQuery** (for DOM manipulation) 
